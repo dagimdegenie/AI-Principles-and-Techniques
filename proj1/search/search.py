@@ -87,17 +87,93 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+       # data's stored in visited are sets b/se unorder, unchangeable & not allowed duplicates
+    stack = util.Stack() 
+    stack.push((problem.getStartState(),[], 0)) # state, actions, cost
+       # data's stored in to stack are tuples b/se order, immutable/unchangeable & allow duplicates
+    
+    while stack:
+        node, actions, cost = stack.pop()
+        
+        if problem.isGoalState(node):
+            return actions
+
+        if node not in visited:
+            visited.add(node)
+
+            for successor, action, stepcost in problem.getSuccessors(node):
+                if successor not in visited:
+                    new_actions = actions + [action]
+                    new_cost = cost + stepcost
+                    stack.push((successor, new_actions, new_cost))
+
+    return []
+
+    #util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    visited = set() 
+       # data's stored in visited are sets b/se unorder, unchangeable & not allowed duplicates
+    queue = util.Queue()
+    queue.push((problem.getStartState(),[], 0)) # state, actions, cost
+       # data's stored in to stack are tuples b/se order, immutable/unchangeable & allow duplicates
+
+    while queue:
+        node, actions, cost = queue.pop()
+
+        if problem.isGoalState(node):
+            return actions
+
+        if node not in visited:
+            visited.add(node)
+
+            for successor, action, stepcost in problem.getSuccessors(node):
+                if successor not in visited:
+                    new_actions = actions + [action]
+                    new_cost = cost + stepcost
+                    queue.push((successor, new_actions, new_cost))
+
+    return []
+   
+   
+   
+    #util.raiseNotDefined()
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+
+    visited = set()
+       # data's stored in visited are sets b/se unorder, unchangeable & not allowed duplicates
+    queue = util.PriorityQueue()
+    queue.push((problem.getStartState(),[], 0), 0) # state, actions, cost
+       # data's stored in to stack are tuples b/se order, immutable/unchangeable & allow duplicates
+
+    while queue:
+        node, actions, cost = queue.pop()
+
+        if problem.isGoalState(node):
+            return actions
+
+        if node not in visited:
+            visited.add(node)
+
+            for successor, action, stepcost in problem.getSuccessors(node):
+                if successor not in visited:
+                    new_actions = actions + [action]
+                    new_cost = cost + stepcost
+                    queue.push((successor, new_actions, new_cost), new_cost)
+
+    return []
+
+    
+    #util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None):
     """
