@@ -1,5 +1,5 @@
 
-
+# dict consists key(cities) & correspodning path cost
 ethiopia_cities = {
     'Addis Ababa': {'Adama': 3, 'Ambo': 5, 'Debre Berhan': 5},
     'Adama': {'Matahara': 3, 'Asella': 4, 'Batu': 4, 'Addis Ababa': 3},

@@ -1,3 +1,4 @@
+# the dict consists key, successors & path cost
 travelling_cities = {'Addis Ababa': {'Adama':3, 'Ambo':5, 'Debre Berhan':5,'Debre Markos':13},
              'Adama': {'Matahara':3, 'Asella':4, 'Batu':4, 'Addis Ababa':3}, 
              'Ambo': {'Wolkite':6, 'Addis Ababa':5, 'Nekemte':8}, 
@@ -87,6 +88,7 @@ travelling_cities = {'Addis Ababa': {'Adama':3, 'Ambo':5, 'Debre Berhan':5,'Debr
              'Werdez': { 'Kebri Dehar':6}
                       }
 
+# the heuristic_costs dict consists key & heuristic cost
 heuristic_costs = {
              'Addis Ababa':26,
              'Adama':23,
@@ -199,7 +201,7 @@ heuristic_costs = {
 
 
 
-
+# to create and manipulate priority queues
 import heapq
 
 def astar_search(graph, heuristic_costs, initial_state, goal_state):
@@ -253,3 +255,7 @@ goal_state = input('destination city: ')
 path = astar_search(travelling_cities, heuristic_costs, initial_state, goal_state)
 print(path)
 print('number of cities through the optimal path are: ', len(path))
+
+'''
+A* search algorithm will find the optimal path between two cities in a graph
+'''

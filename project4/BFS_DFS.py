@@ -1,26 +1,29 @@
 
+# for appending and pops
 from collections import deque
 infinity = float('inf')   
 
 class Graph: 
+    #initializing the graph with a dictionary of nodes & their neighbors.
     def __init__(self, graph_dict=None, directed=True):
         self.graph_dict = graph_dict or {}
         self.directed = directed 
-        self.graph = graph_dict  #
-        
+        self.graph = graph_dict  
+    #to return the lsit of nodes from the given graph    
     def nodes(self):        
         return list(self.graph_dict.keys())  
     #
     def print_graph(self):
         for node, neighbors in self.graph.items():
             print(f"{node} --> {', '.join(neighbors)}")
-    #
+    
+    # to return the neighbors from a given node
     def get(self, a, b=None):
         links = self.graph_dict.get(a) 
         if b is None:
             return links
     
-       
+# for representing a problem & features       
 class Problem: 
     def __init__(self, start, goal=None):
        self.start = start
@@ -38,7 +41,7 @@ class Problem:
     def value(self, state):
         raise NotImplementedError
   
-   
+# inherited from the pr0blem class for extending grahp functionality    
 class GraphProblem(Problem):  
     def __init__(self, start, goal, graph):
         Problem.__init__(self, start, goal)
@@ -125,7 +128,7 @@ visit_ethiopia = Graph(dict( {'Addis Ababa': {'Adama', 'Ambo', 'Debre Berhan'},
             'Mizan Teferi': {'Tepi', 'Bonga', 'Basketo'}, 
              'Gambella': {'Gore', 'Dambidollo'}, 
              'Assosa': {'Dambidollo', 'Metekel'}, 
-            'Woldia': {'Dessie', 'Lalibella', 'Samara', 'Alamata'},
+            'Woldia': {'Dessie', 'Lalibela', 'Samara', 'Alamata'},
              'Bahirdar': {'Finote Selam', 'Injibara', 'Metekel', 'Azezo', 'Debre Tabor'}, 
              'Injibara': {'Bahirdar', 'Finote Selam'}, 
              'Harar': { 'Dire Dawa', 'Babile'}, 
@@ -138,15 +141,15 @@ visit_ethiopia = Graph(dict( {'Addis Ababa': {'Adama', 'Ambo', 'Debre Berhan'},
             'Arba Minchi': {'Wolaita Sodo', 'Konso', 'Basketo'}, 
              'Basketo': { 'Arba Minchi', 'Dawro', 'Mizan Teferi', 'Benchi Maji'}, 
              'Metekel': { 'Assosa', 'Bahirdar'},
-             'Lalibella': {'Woldia', 'Debre Tabor', 'Sekota'},
-             'Debre Tabor': {'Lalibella', 'Bahirdar'}, 
+             'Lalibela': {'Woldia', 'Debre Tabor', 'Sekota'},
+             'Debre Tabor': {'Lalibela', 'Bahirdar'}, 
              'Azezo': {'Gondar', 'Bahirdar', 'Metema'}, 
              'Babile': { 'Harar', 'Jigjiga'}, 
              'Kilbet Rasu': {'Fanti Rasu' }, 
              'Mekelle': {'Alamata', 'Adwa', 'Adigrat', 'Sekota'}, 
-             'Sekota': {'Alamata', 'Mekelle', 'Lalibella'}, 
+             'Sekota': {'Alamata', 'Mekelle', 'Lalibela'}, 
             'Dega Habur': {'Goba', 'Jigjiga', 'Kebri Dehar'}, 
-            'Kebri Dehar': {'Gode', 'Sof Oumer', 'Dega Habur', 'Werdez'}, 
+            'Kebri Dehar': {'Gode', 'Sof Oumer', 'Dega Habur', 'Werder'}, 
             'Yabello': { 'Bulehora', 'Konso', 'Moyale'}, 
             'Konso': {'Arba Minchi', 'Yabello'}, 
             'Benchi Maji': { 'Basketo'}, 
@@ -154,11 +157,15 @@ visit_ethiopia = Graph(dict( {'Addis Ababa': {'Adama', 'Ambo', 'Debre Berhan'},
             'Metema': { 'Azezo', 'Gondar'},  
             'Jigjiga': { 'Babile', 'Dega Habur'}, 
             'Adwa': { 'Mekelle', 'Axum', 'Adigrat'},
-            'Adigrat': { 'Mekelle', 'Adwa'},
-            'Axum': { 'Adwa'},
-            'Gode': { 'Kebri Dehar', 'Werdez'}, 
-            'Werdez': { 'Kebri Dehar', 'Gode'},
-            'Moyale': { 'Yabello'} }))
+            'Adigrat': { 'Mekelle', 'Adwa'}, 
+            'Gode': { 'Dollo', 'Kebri Dehar' }, 
+            'Werder': { 'Kebri Dehar'}, 
+            'Moyale': { 'Yabello'}, 
+            'Debarke': { 'Gondar', 'Shire'}, 
+            'Axum': {'Shire', 'Adwa'}, 
+            'Dollo': { 'Gode'}, 
+            'Shire': { 'Axum', 'Humera', 'Debarke'},
+            'Humera': { 'Shire', 'Gondar'}}), False)
 
 print('\n solution for problem 1.1 \n')             
 visit_ethiopia.print_graph()
@@ -173,10 +180,11 @@ def BFS(problem):
     node = Node(problem.start)
     if problem.goal_test(node.state):
         return node
-    frontier = deque([node])
+    frontier = deque([node])  #Dequeue a node from the front of the queue
+    # data's stored in visited are sets b/se unorder, unchangeable & not allowed duplicates
     explored = set()
     while frontier:
-        node = frontier.popleft()
+        node = frontier.popleft() #since BFS uses queue(FIFO)
         explored.add(node.state)
         for child in node.expand(problem):
             if child.state not in explored and child not in frontier:
@@ -209,10 +217,11 @@ else:
 def DFS(problem):
    
     frontier = [(Node(problem.start))]
+    # data's stored in visited are sets b/se unorder, unchangeable & not allowed duplicates
     explored = set()
     
     while frontier:
-        node = frontier.pop()
+        node = frontier.pop() # since DFS uses stack(LIFO)
         if problem.goal_test(node.state):
             return node
         explored.add(node.state)
@@ -227,3 +236,4 @@ if finalnode is not None:
     print("Possible path", visit_ethiopia_problem.start, "to", visit_ethiopia_problem.goal, finalnode.solution())
 else:
     print("Path does not exist.")
+
